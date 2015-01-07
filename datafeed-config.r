@@ -32,9 +32,10 @@ IBcontractSpecs <- list(
 )
 
  
-IBstreamsymbolSpecs <- list( stream1=c( "BMW","DB1","DBK","DPB","DPW","LHA","RWE","SAP","SIE","TUI","UBS","VOW"  )  #12
-							, stream2=c("DPB","DPW","LHA")  # 3
-							)  
+IBstreamsymbolSpecs <- list( 	 stream1=c("BMW","DB1","DBK","DPB","DPW","LHA","RWE","SAP","SIE","TUI","UBS","VOW"  )  #12 symbols
+				,stream2=c("DPB","DPW","LHA")  # 3 symbols
+				,stream3=c("SIE")  #1 symbol
+			)  
 
 
 #  * Directories
