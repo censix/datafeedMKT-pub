@@ -2,7 +2,7 @@
 Tickdata streams of up to 100 symbols per stream, downsampled to 5 sec intervals
 
 This collection of R scripts can be used to generate live market data streams from IB.
-The entry point is '00-run-PAPER.r' where the connection to the IB TWS is established
+The entry point is '01run-paper.r' where the connection to the IB TWS is established
 and the different streams in the datafeed are launched. See 'datafeed-config.r' for a 
 definition of the individual streams and its components. The most basic stream consists
 of only one symbol, i.e. a stock like 'SIE' on IBIS. The stream delivers to following for
