@@ -7,7 +7,7 @@ and the different streams in the datafeed are launched. See 'datafeed-config.r' 
 definition of the individual streams and its components. The most basic stream consists
 of only one symbol, i.e. a stock like 'SIE' on IBIS. The stream delivers to following for
 each symbol it contains:
-BidSize, BidPrice, AskPrice, AskSize, LastPrice, Volume, ... etc.
+    BidSize, BidPrice, AskPrice, AskSize, Last, LastSize, Volume(cumulative), Open(day), High(day), Low(day)
 These values are sampled(!) every 5 seconds. If you need the pure tickdata 
 without the 5 sec binning, then this datafeed tool is not for you!
 
