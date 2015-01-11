@@ -314,14 +314,14 @@ twsCALLBACKdatafeed <- function(twsCon, eWrapper, timestamp, file, playback=1, .
       if (socketSelect(list(con), FALSE, timeout=1L)) {  #timeout at 1sec
 		  curMsg <- .Internal(readBin(con, "character", 1L, NA_integer_, TRUE, FALSE))
 		  res <- NULL
-		  nowtime <- Sys.time()
+		  nowtime <- Sys.time() 
 		  if(!is.null(timestamp)) {
 		  #print('AAA')
 			res <- processMsg(curMsg, con, eWrapper, format(nowtime, timestamp), file, twsCon, ...)
 		  } else {
 			res <- processMsg(curMsg, con, eWrapper, timestamp, file, twsCon, ...)
 		  }
-	  } else nowtime <- Sys.time()
+      } else nowtime <- Sys.time()
       #S. Added here to make sure Mktdata is always written to a new row, even if no update ocurred
       #print('BBB')
       eWrapper$makeDataRowIfTime(nowtime) 
