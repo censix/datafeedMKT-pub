@@ -1,8 +1,6 @@
-
-
 #Contracts has to be a list(..) of twsContracts
 
-
+#IBeWrapper.Mktdata.SHARED.MULTISYMBOL <- function(Contracts=list(), ShareFiles=list(), Aggregation=list(), ShareFilesWipe=FALSE, xupdate.mat=NULL) {
 IBeWrapper.Mktdata.SHARED.MULTISYMBOL <- function(Contracts=list(), ShareFiles=list(), Aggregation=5L, ShareFilesWipe=FALSE, xupdate.mat=NULL) {
   verbose <- 0 # only for init
   eW <- eWrapper(NULL)
@@ -171,12 +169,26 @@ IBeWrapper.Mktdata.SHARED.MULTISYMBOL <- function(Contracts=list(), ShareFiles=l
 
    eW$assign.Data("gridtimeoflastrow.int.sec", 0)  #initialize
    eW$assign.Data("barsize.int.sec", as.integer(Aggregation))  #initialize
+   eW$assign.Data("first.row.complete", FALSE)  #initialize. Will be true after we have the first full row
+												# and only then we will start writing rows to shared mem.
 
 
    eW$makeDataRowIfTime <- function(nowtime) {
 	 verbose <- 0  # 0: nothing, 1:basic, 2:all
 	 gridtimeoflastrow.int.sec <- eW$get.Data("gridtimeoflastrow.int.sec")
 	 barsize.int.sec <- eW$get.Data("barsize.int.sec")
+	 first.row.complete <- eW$get.Data("first.row.complete")
+	 if (!first.row.complete) {  # Do not write rows until we have one complete first row for all id's (NAs in 7,8,9,10 allowed!)
+		data <- eW$get.Data("data")
+		numcontracts <- eW$get.Data("numcontracts")
+		ss <- sum(vv<-vapply(1:numcontracts, function(id) { as.numeric(any(is.na(data[[id]][1,1:6]))) },0)) #dont check 7,8,9,10
+		#cat(vv,'\n')		
+		#if we still have NAs, return(), otherwise set to TRUE
+		if (ss) return() else {
+			eW$assign.Data("first.row.complete", TRUE)
+			cat('first.row.complete\n')
+		}
+	 }
 	 if ( (gridtime<-unclass(nowtime)%/%barsize.int.sec*barsize.int.sec) > gridtimeoflastrow.int.sec ) {
 		# Reset the timestamp
 		eW$assign.Data("gridtimeoflastrow.int.sec", gridtime)
@@ -314,14 +326,14 @@ twsCALLBACKdatafeed <- function(twsCon, eWrapper, timestamp, file, playback=1, .
       if (socketSelect(list(con), FALSE, timeout=1L)) {  #timeout at 1sec
 		  curMsg <- .Internal(readBin(con, "character", 1L, NA_integer_, TRUE, FALSE))
 		  res <- NULL
-		  nowtime <- Sys.time() 
+		  nowtime <- Sys.time()
 		  if(!is.null(timestamp)) {
 		  #print('AAA')
 			res <- processMsg(curMsg, con, eWrapper, format(nowtime, timestamp), file, twsCon, ...)
 		  } else {
 			res <- processMsg(curMsg, con, eWrapper, timestamp, file, twsCon, ...)
 		  }
-      } else nowtime <- Sys.time()
+	  } else nowtime <- Sys.time()
       #S. Added here to make sure Mktdata is always written to a new row, even if no update ocurred
       #print('BBB')
       eWrapper$makeDataRowIfTime(nowtime) 
@@ -331,6 +343,4 @@ twsCALLBACKdatafeed <- function(twsCon, eWrapper, timestamp, file, playback=1, .
     }
   }
 }
-
-
 
