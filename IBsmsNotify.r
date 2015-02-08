@@ -6,7 +6,7 @@
 # This file can be removed from the sources directory, and everything else will still run
 
 .smssend <- function(msgBODY)  {  
-  #tmpCommand <- 
+  #tmpCommand <- ... needs to be a system command string that sends the SMS message. PENDING
   #system(command=tmpCommand , ignore.stdout = TRUE, ignore.stderr = TRUE, intern = FALSE, wait = FALSE )   #wait=FALSE is very important in order to not interrupt/delay the R processing
 }
 
