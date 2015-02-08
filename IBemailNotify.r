@@ -6,7 +6,7 @@
 # This file can be removed from the sources directory, and everything else will still run
 
 .emailsend <- function(msgBODY, msgHEAD)  { 
-  #tmpCommand <- 
+  #tmpCommand <-  ... needs to be a shell command string for sending an email, i.e. use linux 'sendemail' tool
   #system(command=tmpCommand , ignore.stdout = TRUE, ignore.stderr = TRUE, intern = FALSE, wait = FALSE )   #wait=FALSE is very important in order to not interrupt/delay the R processing
 }
 
