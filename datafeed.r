@@ -1,6 +1,5 @@
 #Create an independent R process for reading marketdata and
 #for sharing it via a mmap structure in the desired aggregation>=5secs.
-#Also saves raw csv to file in the desired aggregation.
 
 
 # Any error happening in this tryCatch.. will be a FATAL error. We send a WARNING email with the error text
@@ -18,9 +17,9 @@ source('IBappendXtsToHistory.r')
 
 source('IBemailNotify.r')
 source('IBsmsNotify.r')
-# if true, notification emails will be sent
+# if true, notification emails will be sent. Implemented as stub only
 ibNotificationEmail <- TRUE
-# if true, notification sms will be sent
+# if true, notification sms will be sent. Implemented as stub only
 ibNotificationSMS <- FALSE
 
 # Cleanup of non-intact files
@@ -161,8 +160,8 @@ if (length(IBstreamsymbolSpecs)>0) {
 }
 
 
-# Eternal loop. this enables us to cold-restart the reqRealTimeBars() should it exit because of specific
-# errors that require a restart of this command. reqRealTimeBars() is only
+# Eternal loop. this enables us to cold-restart the reqMktdata() should it exit because of specific
+# errors that require a restart of this command. reqMktdata() is only
 # allowed to exit because we use our modified twsCALLBACKdatafeed.
 ibShareFilesWipe <- TRUE #At the beginning of the trading day, we wipe the shared mmap files, but when
                          #restarting from interruptions during the day, we don't!!!
@@ -236,7 +235,7 @@ reqMktData(conn=ibConnection,
 
 
 #This call only returns if we get a specific type of error. We don't want this to happen too often
-#These types of error require the reqRealTimeBars() to be reissued, otherwise data will not flow
+#These types of error require the reqMktData() to be reissued, otherwise data will not flow
 #despite it being available.
 Sys.sleep(2*60) #Wait 2 minutes before we attempt a restart
 ibShareFilesWipe <- FALSE #We want to preserve previous data, so no wiping
